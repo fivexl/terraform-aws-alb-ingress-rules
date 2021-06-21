@@ -14,6 +14,7 @@ resource "aws_lb_listener_rule" "this_single_target" {
       values = [each.value]
     }
   }
+  tags = var.tags
 }
 
 resource "aws_lb_listener_rule" "this_multi_target" {
@@ -40,4 +41,5 @@ resource "aws_lb_listener_rule" "this_multi_target" {
       values = [each.value]
     }
   }
+  tags = var.tags
 }

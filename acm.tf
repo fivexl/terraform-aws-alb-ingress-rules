@@ -9,6 +9,8 @@ data "aws_acm_certificate" "this" {
   statuses    = ["ISSUED"]
 }
 
+# The default limit is 25 TLS certificates per ALB
+# 2021-07-23: Current maximum limit of 50 TLS certificates on ALB after quota increase request
 resource "aws_lb_listener_certificate" "this" {
   for_each        = { for k, v in data.aws_acm_certificate.this : k => v.arn }
   certificate_arn = each.value

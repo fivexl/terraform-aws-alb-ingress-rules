@@ -7,46 +7,58 @@ variable "tags" {
 variable "target_groups_map" {
   type = map(number)
   validation {
-    condition     = alltrue([for item in keys(var.target_groups_map) : length(item) <= 30 && can(regex("/\\W|-|\\s/", item)) ? true : false])
-    error_message = "Name cannot be longer than 30 characters and only a-z, A-Z, 0-9 and hyphens(\"-\") are allowed."
+    condition     = alltrue([for item in keys(var.target_groups_map) : length(item) <= 32 && can(regex("/\\W|-|\\s/", item)) ? true : false])
+    error_message = "Name cannot be longer than 32 characters and only a-z, A-Z, 0-9 and hyphens(\"-\") are allowed."
   }
 }
 
 variable "vpc_id" {
-  type = string
+  description = "ID of the VPC in which the Target Group will be created and in which the ALB is located"
+  type        = string
 }
 
 variable "lb_listener_arn" {
-  type = string
+  description = "ARN of Load Balancer Listener, to which the TLS certificate and rules will be added"
+  type        = string
 }
 
 variable "domain_names" {
-  type = list(string)
-}
-
-variable "acm_domain_names" {
-  type    = list(string)
-  default = []
-}
-
-variable "ingress_port" {
-  type    = number
-  default = 80
-}
-
-variable "enable_stickiness" {
-  type    = bool
-  default = false
-}
-
-variable "enable_health_check" {
-  type    = bool
-  default = true
+  description = "List of domain names used to find TLS certificates and condition for rules"
+  type        = list(string)
 }
 
 variable "enable_acm_for_domain_names" {
-  type    = bool
-  default = false
+  description = "Use the `domain_names` to find certificates. Disabled by default"
+  type        = bool
+  default     = false
+}
+
+variable "acm_domain_names" {
+  description = "List of domain names used to find TLS certificates"
+  type        = list(string)
+  default     = []
+}
+
+variable "source_ips" {
+  description = "List of source IP CIDR notations to match. Used to restrict access to the service from outside."
+  type        = list(string)
+  default     = []
+  validation {
+    condition     = length(var.source_ips) <= 4
+    error_message = "We cannot use more than 4 CIDRs per one rule."
+  }
+}
+
+variable "ingress_port" {
+  description = "Port for Target Group. Will be used by default when registering new IP addresses in the target group, if no other port is specified. ECS automatically specifies the port."
+  type        = number
+  default     = 80
+}
+
+variable "enable_health_check" {
+  description = "Enable Health Check at target group level"
+  type        = bool
+  default     = true
 }
 
 variable "protocol" {
@@ -81,6 +93,12 @@ variable "slow_start" {
   default     = 0
 }
 
+variable "enable_stickiness" {
+  description = "Enable stickiness at Target Group level. We do not manage stickiness at the group level of target groups."
+  type        = bool
+  default     = false
+}
+
 variable "stickiness_cookie_duration" {
   description = "The time period, in seconds, during which requests from a client should be routed to the same target."
   type        = number
@@ -94,12 +112,19 @@ variable "health_check_path" {
 }
 
 variable "health_check_port" {
-  description = "Port to use to connect with the target. Valid values are either ports 1-65535"
+  description = "Port to use to connect with the target. Valid values are either ports 1-65535. By default is `0`, this is the traffic port."
   type        = number
   default     = 0
 }
 
+variable "load_balancing_algorithm_type" {
+  description = "Determines how the load balancer selects targets when routing requests. The value is `round_robin` or `least_outstanding_requests`"
+  type        = string
+  default     = "round_robin"
+}
+
 variable "health_check_advanced" {
+  description = "Advanced Health Check settings at the target group level"
   type = object({
     healthy_threshold   = number
     interval            = number

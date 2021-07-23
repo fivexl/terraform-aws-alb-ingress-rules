@@ -13,6 +13,7 @@ resource "aws_lb_target_group" "this" {
     enabled         = var.enable_stickiness
     cookie_duration = var.stickiness_cookie_duration
   }
+  load_balancing_algorithm_type = var.load_balancing_algorithm_type
   health_check {
     enabled             = var.enable_health_check
     healthy_threshold   = var.health_check_advanced.healthy_threshold

@@ -15,7 +15,7 @@ resource "aws_lb_target_group" "this" {
   }
   load_balancing_algorithm_type = var.load_balancing_algorithm_type
   health_check {
-    enabled             = var.enable_health_check
+    enabled             = true # Health check enabled must be true for target groups with target type 'ip'
     healthy_threshold   = var.health_check_advanced.healthy_threshold
     interval            = var.health_check_advanced.interval
     matcher             = var.health_check_advanced.matcher

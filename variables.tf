@@ -55,12 +55,6 @@ variable "ingress_port" {
   default     = 80
 }
 
-variable "enable_health_check" {
-  description = "Enable Health Check at target group level"
-  type        = bool
-  default     = true
-}
-
 variable "protocol" {
   description = "Protocol to use for routing traffic to the targets"
   type        = string

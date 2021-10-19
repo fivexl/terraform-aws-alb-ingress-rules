@@ -57,6 +57,7 @@ module "ingress" {
 
 Apache 2 Licensed. See [LICENSE](LICENSE) for full details.
 
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
 | Name | Version |
@@ -68,7 +69,7 @@ Apache 2 Licensed. See [LICENSE](LICENSE) for full details.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.30.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.63.0 |
 
 ## Modules
 
@@ -113,3 +114,4 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_lb_target_group_arns"></a> [lb\_target\_group\_arns](#output\_lb\_target\_group\_arns) | n/a |
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

@@ -7,7 +7,7 @@ variable "tags" {
 variable "target_groups_map" {
   type = map(number)
   validation {
-    condition     = alltrue([for item in keys(var.target_groups_map) : length(item) <= 32 && can(regex("/\\W|-|\\s/", item)) ? true : false])
+    condition     = alltrue([for item in keys(var.target_groups_map) : length(item) <= 32 && can(regex("^[a-zA-Z0-9-]*$", item)) ? true : false])
     error_message = "Name cannot be longer than 32 characters and only a-z, A-Z, 0-9 and hyphens(\"-\") are allowed."
   }
 }
